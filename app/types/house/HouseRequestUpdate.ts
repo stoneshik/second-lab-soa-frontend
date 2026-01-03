@@ -1,11 +1,15 @@
 export interface HouseRequestUpdate {
     name: string;
-    year: number;
-    numberOfFlatsOnFloor: number;
+    year: number | null;
+    numberOfFlatsOnFloor: number | null;
 }
 
 export const createHouseRequestUpdate = (
-    data: { name: string; year: number; numberOfFlatsOnFloor: number }
+    data: {
+        name: string;
+        year: number | null;
+        numberOfFlatsOnFloor: number | null
+    }
 ): HouseRequestUpdate => {
     return {
         name: data.name,
@@ -14,12 +18,14 @@ export const createHouseRequestUpdate = (
     };
 };
 
-export const isValidHouseRequestUpdate = (obj: unknown): obj is HouseRequestUpdate => {
-    if (!obj || typeof obj !== "object") return false;
-    const house = obj as HouseRequestUpdate;
-    return (
-        typeof house.name === "string" &&
-        typeof house.year === "number" &&
-        typeof house.numberOfFlatsOnFloor === "number"
-    );
+export const prepareHouseRequestUpdateForXml = (
+    houseRequestUpdate: HouseRequestUpdate
+): any => {
+    return {
+        house: {
+            name: houseRequestUpdate.name,
+            year: houseRequestUpdate.year,
+            numberOfFlatsOnFloor: houseRequestUpdate.numberOfFlatsOnFloor,
+        }
+    };
 };

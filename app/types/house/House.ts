@@ -1,14 +1,17 @@
-import { XMLParser, XMLBuilder } from "fast-xml-parser";
-
 export interface House {
     id: number;
     name: string;
-    year: number;
-    numberOfFlatsOnFloor: number;
+    year: number | null;
+    numberOfFlatsOnFloor: number | null;
 }
 
 export const createHouse = (
-    data: { id: number, name: string; year: number; numberOfFlatsOnFloor: number }
+    data: {
+        id: number,
+        name: string;
+        year: number | null;
+        numberOfFlatsOnFloor: number | null
+    }
 ): House => {
     return {
         id: data.id,
@@ -18,26 +21,18 @@ export const createHouse = (
     };
 };
 
-export const isValidHouse = (obj: unknown): obj is House => {
+export const isValidHouse = (obj: unknown): boolean => {
     if (!obj || typeof obj !== "object") return false;
     const house = obj as House;
-    return (
-        typeof house.id === "number" &&
-        typeof house.name === "string" &&
-        typeof house.year === "number" &&
-        typeof house.numberOfFlatsOnFloor === "number"
-    );
-};
-
-export const prepareHouseForXml = (house: House): any => {
-    return {
-        house: {
-            id: house.id,
-            name: house.name,
-            year: house.year,
-            numberOfFlatsOnFloor: house.numberOfFlatsOnFloor,
-        }
-    };
+    if (
+        typeof house.id !== "number" ||
+        typeof house.name !== "string"
+    ) {
+        return false;
+    }
+    if (house.year !== null && typeof house.year !== "number") return false;
+    if (house.numberOfFlatsOnFloor !== null && typeof house.numberOfFlatsOnFloor !== "number") return false;
+    return true;
 };
 
 export const extractHouseFromXml = (xmlObject: any): House | null => {
@@ -45,39 +40,14 @@ export const extractHouseFromXml = (xmlObject: any): House | null => {
     if (!houseData) return null;
     try {
         const house = createHouse({
-            id: Number(houseData.id) || 0,
-            name: String(houseData.name || ""),
-            year: Number(houseData.year) || 0,
-            numberOfFlatsOnFloor: Number(houseData.numberOfFlatsOnFloor) || 0,
+            id: Number(houseData.id),
+            name: String(houseData.name),
+            year: houseData.year == null ? null : Number(houseData.year),
+            numberOfFlatsOnFloor: houseData.numberOfFlatsOnFloor == null ?
+                null : Number(houseData.numberOfFlatsOnFloor),
         });
         return isValidHouse(house) ? house : null;
     } catch {
         return null;
     }
-};
-
-const PARSER_CONFIG = {
-    ignoreAttributes: false,
-    attributeNamePrefix: "@_",
-    parseTagValue: true,
-    parseAttributeValue: true,
-    trimValues: true,
-    processEntities: false,
-} as const;
-
-const parser = new XMLParser(PARSER_CONFIG);
-const builder = new XMLBuilder(PARSER_CONFIG);
-
-export const parseHouseXml = (xml: string): House | null => {
-    try {
-        const parsed = parser.parse(xml);
-        return extractHouseFromXml(parsed);
-    } catch {
-        return null;
-    }
-};
-
-export const serializeHouseToXml = (house: House): string => {
-    const xmlObject = prepareHouseForXml(house);
-    return builder.build(xmlObject);
 };

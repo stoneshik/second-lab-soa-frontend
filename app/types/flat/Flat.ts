@@ -1,14 +1,12 @@
-import { XMLBuilder, XMLParser } from "fast-xml-parser";
+import { XMLParser } from "fast-xml-parser";
 import {
     extractCoordinatesFromXml,
     isValidCoordinates,
-    prepareCoordinatesForXml,
     type Coordinates
 } from "../coordinates/Coordinates";
 import {
     extractHouseFromXml,
     isValidHouse,
-    prepareHouseForXml,
     type House
 } from "../house/House";
 import { parseTransport, Transport } from "../Transport";
@@ -55,7 +53,7 @@ export const createFlat = (
     };
 };
 
-export const isValidFlat = (obj: unknown): obj is Flat => {
+export const isValidFlat = (obj: unknown): boolean => {
     if (!obj || typeof obj !== "object") return false;
     const flat = obj as Flat;
     if (
@@ -74,24 +72,6 @@ export const isValidFlat = (obj: unknown): obj is Flat => {
     if (flat.view !== null && !Object.values(View).includes(flat.view)) return false;
     if (flat.transport !== null && !Object.values(Transport).includes(flat.transport)) return false;
     return true;
-};
-
-export const prepareFlatForXml = (flat: Flat): any => {
-    const result: any = {
-        flat: {
-            id: flat.id,
-            name: flat.name,
-            coordinates: prepareCoordinatesForXml(flat.coordinates),
-            creationDate: flat.creationDate,
-            area: flat.area,
-            numberOfRooms: flat.numberOfRooms,
-            height: flat.height,
-            view: flat.view,
-            transport: flat.transport,
-            house: prepareHouseForXml(flat.house)
-        },
-    };
-    return result;
 };
 
 export const extractFlatFromXml = (xmlObject: any): Flat | null => {
@@ -132,7 +112,6 @@ const PARSER_CONFIG = {
 } as const;
 
 const parser = new XMLParser(PARSER_CONFIG);
-const builder = new XMLBuilder(PARSER_CONFIG);
 
 export const parseFlatXml = (xml: string): Flat | null => {
     try {
@@ -141,9 +120,4 @@ export const parseFlatXml = (xml: string): Flat | null => {
     } catch {
         return null;
     }
-};
-
-export const serializeFlatToXml = (flat: Flat): string => {
-    const xmlObject = prepareFlatForXml(flat);
-    return builder.build(xmlObject);
 };
