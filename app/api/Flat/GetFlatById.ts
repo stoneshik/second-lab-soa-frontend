@@ -1,13 +1,14 @@
 import { api } from "~/lib/axios";
 import { isErrorMessage } from "~/types/ErrorMessage";
+import { parseFlatXml, type Flat } from "~/types/flat/Flat";
 
-export interface ParamsForDeleteOneByEstablishmentDate { date: string; }
+export interface ParamsForGetFlatById { id: number; }
 
-export const deleteOneByEstablishmentDate = async (
-    params: ParamsForDeleteOneByEstablishmentDate
-): Promise<void> => {
+export const getFlatById = async ({ id }: ParamsForGetFlatById): Promise<Flat> => {
     try {
-        await api.delete("/music-bands/by-establishment", { params });
+        const response = await api.get(`/flats/${id}`);
+        const responseFlat = parseFlatXml(response.data);
+        return responseFlat as Flat;
     } catch (error) {
         if (error && typeof error === "object" && "response" in error) {
             // @ts-ignore

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import type { ParamsForGetWrapperListMusicBand } from "~/api/Flat/GetAllMusicBands";
-import { getWrapperListMusicBand } from "~/api/Flat/GetAllMusicBands";
+import type { ParamsForGetWrapperListFlats } from "~/api/Flat/GetAllFlats";
+import { getWrapperListMusicBand } from "~/api/Flat/GetAllFlats";
 import { MusicBandSelectTable } from "~/components/Tables/Flat/MusicBandSelectTable/MusicBandSelectTable";
 import { Button } from "~/components/UI/Button/Button";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
@@ -23,7 +23,7 @@ export function MusicBandSelect({ onSelectMusicBand }: Readonly<MusicBandSelectP
     const [sortOrder] = useState<SortOrder>(SortOrder.ASC);
 
     const load = useCallback(
-        async (params: ParamsForGetWrapperListMusicBand) => {
+        async (params: ParamsForGetWrapperListFlats) => {
             try {
                 const data = await getWrapperListMusicBand(params);
                 setWrapperListMusicBand(data);

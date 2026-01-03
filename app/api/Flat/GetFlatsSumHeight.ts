@@ -1,11 +1,12 @@
 import { api } from "~/lib/axios";
 import { isErrorMessage } from "~/types/ErrorMessage";
-import type { MusicBand } from "~/types/flat/Flat";
+import { parseMyResponseXml, type MyResponse } from "~/types/Response";
 
-export const getOneWithMinId = async (): Promise<MusicBand> => {
+export const getFlatsSumHeight = async (): Promise<MyResponse> => {
     try {
-        const response = await api.get("/music-bands/min-id");
-        return response.data as MusicBand;
+        const response = await api.get(`/flats/sum/height`);
+        const responseValue = parseMyResponseXml(response.data);
+        return responseValue as MyResponse;
     } catch (error) {
         if (error && typeof error === "object" && "response" in error) {
             // @ts-ignore

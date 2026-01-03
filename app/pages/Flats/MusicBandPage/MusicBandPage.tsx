@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState, type JSX } from "react";
 import { useParams } from "react-router-dom";
 import type { MusicBand } from "~/types/flat/Flat";
 
-import { deleteMusicBand } from "~/api/Flat/DeleteMusicBand";
-import { getMusicBandById, type ParamsForGetMusicBandId } from "~/api/Flat/GetMusicBandById";
+import { deleteMusicBand } from "~/api/Flat/DeleteFlat";
+import { getMusicBandById, type ParamsForGetFlatById } from "~/api/Flat/GetFlatById";
 import { MusicBandEditForm } from "~/components/Forms/MusicBands/MusicBandEditForm/MusicBandEditForm";
 import { MusicBandTable } from "~/components/Tables/Flat/MusicBandTable/MusicBandTable";
 import { Button } from "~/components/UI/Button/Button";
@@ -17,7 +17,7 @@ export default function MusicBandPage(): JSX.Element {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const load = useCallback(
-        async (params: ParamsForGetMusicBandId) => {
+        async (params: ParamsForGetFlatById) => {
             try {
                 const data = await getMusicBandById(params);
                 setMusicBand(data);

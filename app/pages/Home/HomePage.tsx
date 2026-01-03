@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type JSX } from "react";
 
-import type { ParamsForGetWrapperListMusicBand } from "~/api/Flat/GetAllMusicBands";
-import { getWrapperListMusicBand } from "~/api/Flat/GetAllMusicBands";
+import type { ParamsForGetWrapperListFlats } from "~/api/Flat/GetAllFlats";
+import { getWrapperListMusicBand } from "~/api/Flat/GetAllFlats";
 import { MusicBandTable } from "~/components/Tables/Flat/MusicBandTable/MusicBandTable";
 import { Button } from "~/components/UI/Button/Button";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
@@ -26,7 +26,7 @@ export default function HomePage(): JSX.Element {
     const [sortOrder, setSortOrder] = useState<SortOrder>(SortOrder.ASC);
 
     const load = useCallback(
-        async (params: ParamsForGetWrapperListMusicBand) => {
+        async (params: ParamsForGetWrapperListFlats) => {
             try {
                 const data = await getWrapperListMusicBand(params);
                 setWrapperListMusicBand(data);

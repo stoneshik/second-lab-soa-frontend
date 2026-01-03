@@ -1,11 +1,11 @@
 import { api } from "~/lib/axios";
 import { isErrorMessage } from "~/types/ErrorMessage";
 
-export interface ParamsForDeleteMusicBand { id: number; }
+export interface ParamsForDeleteFlat { id: number; }
 
-export const deleteMusicBand = async ({ id }: ParamsForDeleteMusicBand): Promise<void> => {
+export const deleteMusicBand = async ({ id }: ParamsForDeleteFlat): Promise<void> => {
     try {
-        await api.delete(`/music-bands/${id}`);
+        await api.delete(`/flats/${id}`);
     } catch (error) {
         if (error && typeof error === "object" && "response" in error) {
             // @ts-ignore

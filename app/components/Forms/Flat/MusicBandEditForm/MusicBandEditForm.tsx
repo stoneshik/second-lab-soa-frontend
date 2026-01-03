@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { updateMusicBand, type ParamsForUpdateMusicBand } from "~/api/Flat/UpdateMusicBand";
+import { updateMusicBand, type ParamsForUpdateMusicBand } from "~/api/Flat/UpdateFlat";
 import { Button } from "~/components/UI/Button/Button";
 import type { AlbumRequestUpdate } from "~/types/album/AlbumRequestUpdate";
 import type { CoordinatesRequestUpdate } from "~/types/coordinates/CoordinatesRequestUpdate";

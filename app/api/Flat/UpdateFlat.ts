@@ -1,13 +1,16 @@
 import { api } from "~/lib/axios";
 import { isErrorMessage } from "~/types/ErrorMessage";
-import type { MusicBand } from "~/types/flat/Flat";
+import { serializeFlatRequestUpdateToXml, type FlatRequestUpdate } from "~/types/flat/FlatRequestUpdate";
 
-export interface ParamsForGetMusicBandId { id: number; }
+export interface ParamsForUpdateFlat {
+    id: number;
+    flatRequestUpdate: FlatRequestUpdate
+}
 
-export const getMusicBandById = async ({ id }: ParamsForGetMusicBandId): Promise<MusicBand> => {
+export const updateFlat = async (params: ParamsForUpdateFlat): Promise<void> => {
     try {
-        const response = await api.get(`/music-bands/${id}`);
-        return response.data as MusicBand;
+        const xmlValue: string = serializeFlatRequestUpdateToXml(params.flatRequestUpdate);
+        await api.put(`/music-bands/${params.id}`, xmlValue);
     } catch (error) {
         if (error && typeof error === "object" && "response" in error) {
             // @ts-ignore

@@ -1,16 +1,5 @@
 import { XMLBuilder, XMLParser } from "fast-xml-parser";
 
-const PARSER_CONFIG = {
-  ignoreAttributes: false,
-  attributeNamePrefix: "@_",
-  parseTagValue: true,
-  processEntities: false,
-  isArray: (name: string) => name === 'violation'
-} as const;
-
-const parser = new XMLParser(PARSER_CONFIG);
-const builder = new XMLBuilder(PARSER_CONFIG);
-
 export interface ErrorMessage {
     message: string;
     violations: {
@@ -37,6 +26,17 @@ export const createMessageStringFromErrorMessage = (errorMessage: ErrorMessage):
     const message = `${stringWithFields}`;
     return message;
 };
+
+const PARSER_CONFIG = {
+  ignoreAttributes: false,
+  attributeNamePrefix: "@_",
+  parseTagValue: true,
+  processEntities: false,
+  isArray: (name: string) => name === 'violation'
+} as const;
+
+const parser = new XMLParser(PARSER_CONFIG);
+const builder = new XMLBuilder(PARSER_CONFIG);
 
 export const parseErrorMessage = (xml: string): ErrorMessage => {
     const parsed = parser.parse(xml);

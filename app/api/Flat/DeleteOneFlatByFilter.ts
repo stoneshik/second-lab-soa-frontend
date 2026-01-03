@@ -1,15 +1,17 @@
 import { api } from "~/lib/axios";
 import { isErrorMessage } from "~/types/ErrorMessage";
-import type { MusicBand } from "~/types/flat/Flat";
 
-export interface ParamsForGetBandsAfterEstablishment { date: string; }
+export interface ParamsForDeleteOneByEstablishmentDate {
+    houseName: string,
+    houseYear: number,
+    numberOfFlatOnFloor: number
+}
 
-export const getBandsAfterEstablishment = async (
-    params: ParamsForGetBandsAfterEstablishment
-): Promise<MusicBand[]> => {
+export const deleteOneByEstablishmentDate = async (
+    params: ParamsForDeleteOneByEstablishmentDate
+): Promise<void> => {
     try {
-        const response = await api.get("/music-bands/after-establishment", { params });
-        return response.data as MusicBand[];
+        await api.delete("/flats", { params });
     } catch (error) {
         if (error && typeof error === "object" && "response" in error) {
             // @ts-ignore

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { deleteOneByEstablishmentDate, type ParamsForDeleteOneByEstablishmentDate } from "~/api/Flat/DeleteOneByEstablishmentDate";
+import { deleteOneByEstablishmentDate, type ParamsForDeleteOneByEstablishmentDate } from "~/api/Flat/DeleteOneFlatByFilter";
 import { Button } from "~/components/UI/Button/Button";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
 import styles from "./DeleteOneByEstablishmentDateForm.module.scss";

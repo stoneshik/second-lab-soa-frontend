@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { createMusicBand, type ParamsForCreateMusicBand } from "~/api/Flat/CreateMusicBand";
+import { createMusicBand, type ParamsForCreateFlat } from "~/api/Flat/CreateFlat";
 import { Button } from "~/components/UI/Button/Button";
 import type { AlbumRequestCreate } from "~/types/album/AlbumRequestCreate";
 import type { CoordinatesRequestCreate } from "~/types/coordinates/CoordinatesRequestCreate";
@@ -147,7 +147,7 @@ export function MusicBandCreateForm() {
                     forRequestStudioAddress = null;
                 }
 
-                const params: ParamsForCreateMusicBand = {
+                const params: ParamsForCreateFlat = {
                     name: name,
                     coordinates: forRequestCoordinates,
                     coordinatesId: (coordinatesId === null)? null : Math.floor(coordinatesId),
