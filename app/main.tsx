@@ -1,0 +1,27 @@
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import App, { ErrorBoundary } from "./root";
+
+import HomePage from "./pages/Home/HomePage";
+
+import "~/styles/globals.scss";
+import MusicBandByIdPage from "./pages/Flats/MusicBandPage/MusicBandPage";
+import MusicBandsListPage from "./pages/Flats/MusicBandsPage/MusicBandsPage";
+
+const root = createRoot(document.getElementById("root")!);
+
+root.render(
+    <React.StrictMode>
+        <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<App />} errorElement={<ErrorBoundary />}>
+            <Route index element={<HomePage />} />
+
+            <Route path="flats" element={<MusicBandsListPage />} />
+            <Route path="flats/:id" element={<MusicBandByIdPage />} />
+            </Route>
+        </Routes>
+        </BrowserRouter>
+    </React.StrictMode>
+);
