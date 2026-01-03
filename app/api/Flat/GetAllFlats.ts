@@ -10,7 +10,7 @@ export interface ParamsForGetWrapperListFlats {
     sort: SortValue[] | null;
 }
 
-export const getWrapperListMusicBand = async (
+export const getWrapperListFlats = async (
     params: ParamsForGetWrapperListFlats
 ): Promise<WrapperListFlats> => {
     try {
@@ -30,7 +30,7 @@ export const getWrapperListMusicBand = async (
                 }
             }
         }
-        const response = await api.get("/music-bands", { params: queryParams });
+        const response = await api.get("/flats", { params: queryParams });
         const responseWrapperListFlats = parseWrapperListFlatsXml(response.data);
         return responseWrapperListFlats as WrapperListFlats;
     } catch (error) {

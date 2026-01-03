@@ -12,7 +12,7 @@ export const createResponse = (
     };
 };
 
-export const isValidMyResponse = (obj: unknown): boolean => {
+export const isValidMyResponse = (obj: unknown): obj is MyResponse => {
     if (!obj || typeof obj !== "object") return false;
     const response = obj as MyResponse;
     return (

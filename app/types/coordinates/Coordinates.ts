@@ -14,7 +14,7 @@ export const createCoordinates = (
     };
 };
 
-export const isValidCoordinates = (obj: unknown): boolean => {
+export const isValidCoordinates = (obj: unknown): obj is Coordinates => {
     if (!obj || typeof obj !== "object") return false;
     const coords = obj as Coordinates;
     return (

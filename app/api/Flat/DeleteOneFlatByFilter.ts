@@ -1,14 +1,14 @@
 import { api } from "~/lib/axios";
 import { isErrorMessage } from "~/types/ErrorMessage";
 
-export interface ParamsForDeleteOneByEstablishmentDate {
+export interface ParamsForDeleteOneFlatByEstablishmentDate {
     houseName: string,
     houseYear: number,
     numberOfFlatOnFloor: number
 }
 
-export const deleteOneByEstablishmentDate = async (
-    params: ParamsForDeleteOneByEstablishmentDate
+export const deleteOneFlatByEstablishmentDate = async (
+    params: ParamsForDeleteOneFlatByEstablishmentDate
 ): Promise<void> => {
     try {
         await api.delete("/flats", { params });

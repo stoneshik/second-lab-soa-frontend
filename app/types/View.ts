@@ -6,10 +6,10 @@ export enum View {
 }
 
 export const ViewDictionary: Record<string, string> = {
-    STREET: "Street",
-    YARD: "Yard",
-    BAD: "Bad",
-    GOOD: "Good",
+    STREET: "street",
+    YARD: "yard",
+    BAD: "bad",
+    GOOD: "good",
 };
 
 export const parseView = (value: unknown): View | null => {

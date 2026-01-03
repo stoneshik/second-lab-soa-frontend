@@ -20,7 +20,7 @@ export const createGroup = (
     };
 };
 
-export const isValidGroup = (obj: unknown): boolean => {
+export const isValidGroup = (obj: unknown): obj is Group => {
     if (!obj || typeof obj !== "object") return false;
     const group = obj as Group;
     return (

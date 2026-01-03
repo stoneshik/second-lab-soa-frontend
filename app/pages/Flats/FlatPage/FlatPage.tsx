@@ -1,26 +1,25 @@
 import { useCallback, useEffect, useState, type JSX } from "react";
 import { useParams } from "react-router-dom";
-import type { MusicBand } from "~/types/flat/Flat";
+import type { Flat } from "~/types/flat/Flat";
 
-import { deleteMusicBand } from "~/api/Flat/DeleteFlat";
-import { getMusicBandById, type ParamsForGetFlatById } from "~/api/Flat/GetFlatById";
-import { MusicBandEditForm } from "~/components/Forms/MusicBands/MusicBandEditForm/MusicBandEditForm";
-import { MusicBandTable } from "~/components/Tables/Flat/MusicBandTable/MusicBandTable";
+import { deleteFlat } from "~/api/Flat/DeleteFlat";
+import { getFlatById, type ParamsForGetFlatById } from "~/api/Flat/GetFlatById";
+import { FlatTable } from "~/components/Tables/Flat/FlatTable/FlatTable";
 import { Button } from "~/components/UI/Button/Button";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
-import styles from "./MusicBandPage.module.scss";
+import styles from "./FlatPage.module.scss";
 
-export default function MusicBandPage(): JSX.Element {
+export default function FlatPage(): JSX.Element {
     const { id } = useParams<{ id: string }>();
-    const [musicBand, setMusicBand] = useState<MusicBand | null>(null);
+    const [flat, setFlat] = useState<Flat | null>(null);
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const load = useCallback(
         async (params: ParamsForGetFlatById) => {
             try {
-                const data = await getMusicBandById(params);
-                setMusicBand(data);
+                const data = await getFlatById(params);
+                setFlat(data);
                 setErrorMessage("");
             } catch (error) {
                 if (isErrorMessage(error)) {
@@ -37,13 +36,13 @@ export default function MusicBandPage(): JSX.Element {
         let intervalId: NodeJS.Timeout;
         const fetchData = async () => {
             if (!mounted) return;
-            const musicBandId: number = (id === undefined)? 0 : +id;
+            const flatId: number = (id === undefined)? 0 : +id;
             try {
                 await load({
-                    id: musicBandId
+                    id: flatId
                 });
             } catch {
-                setErrorMessage("Не получилось загрузить данные");
+                setErrorMessage("Failed to load data");
             }
         };
         fetchData();
@@ -55,10 +54,10 @@ export default function MusicBandPage(): JSX.Element {
     }, [id, load]);
 
     const handlingDelete = async () => {
-        const musicBandId: number = (id === undefined)? 0 : +id;
+        const flatId: number = (id === undefined)? 0 : +id;
         try {
-            await deleteMusicBand({id: musicBandId});
-            setSuccessMessage("Музыкальная группа успешно удалена");
+            await deleteFlat({id: flatId});
+            setSuccessMessage("Flat successfully delete");
             setErrorMessage("");
             setTimeout(() => globalThis.location.assign('/'), 2000);
         } catch (error) {
@@ -72,13 +71,12 @@ export default function MusicBandPage(): JSX.Element {
 
     return (
         <div className={styles.wrapper}>
-            <h1>Музыкальная группа</h1>
+            <h1>Flat</h1>
             <div className={styles.error}>{errorMessage}</div>
-            {!musicBand && <div className={styles.error}>Музыкальная группа не найдена</div>}
-            {musicBand && <MusicBandTable musicBands={[musicBand]} />}
-            {musicBand && <MusicBandEditForm musicBand={musicBand} />}
-            {musicBand &&
-                <Button className={styles.delete} onClick={handlingDelete} textButton={"❌ Удаление музыкальной группы"} /> }
+            {!flat && <div className={styles.error}>Flat not found</div>}
+            {flat && <FlatTable flats={[flat]} />}
+            {flat &&
+                <Button className={styles.delete} onClick={handlingDelete} textButton={"❌ Delete flat"} /> }
             {successMessage && <div className="success">{successMessage}</div>}
         </div>
     );

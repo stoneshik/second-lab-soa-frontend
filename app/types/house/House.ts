@@ -21,7 +21,7 @@ export const createHouse = (
     };
 };
 
-export const isValidHouse = (obj: unknown): boolean => {
+export const isValidHouse = (obj: unknown): obj is House => {
     if (!obj || typeof obj !== "object") return false;
     const house = obj as House;
     if (

@@ -27,7 +27,7 @@ export const createWrapperListFlats = (
     };
 };
 
-export const isValidWrapperListFlats = (obj: unknown): boolean => {
+export const isValidWrapperListFlats = (obj: unknown): obj is WrapperListFlats => {
     if (!obj || typeof obj !== "object") return false;
     const wrapper = obj as WrapperListFlats;
     if (
@@ -46,7 +46,7 @@ export const isValidWrapperListFlats = (obj: unknown): boolean => {
 };
 
 export const extractWrapperListFlatsFromXml = (xmlObject: any): WrapperListFlats | null => {
-    const wrapperData = xmlObject.wrapperListFlats || xmlObject;
+    const wrapperData = xmlObject.flatsPage || xmlObject;
     if (!wrapperData) return null;
     try {
         let flats: Flat[] = [];

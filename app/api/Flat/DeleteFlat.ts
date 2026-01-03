@@ -3,7 +3,7 @@ import { isErrorMessage } from "~/types/ErrorMessage";
 
 export interface ParamsForDeleteFlat { id: number; }
 
-export const deleteMusicBand = async ({ id }: ParamsForDeleteFlat): Promise<void> => {
+export const deleteFlat = async ({ id }: ParamsForDeleteFlat): Promise<void> => {
     try {
         await api.delete(`/flats/${id}`);
     } catch (error) {

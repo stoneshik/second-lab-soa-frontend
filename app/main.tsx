@@ -6,8 +6,7 @@ import App, { ErrorBoundary } from "./root";
 import HomePage from "./pages/Home/HomePage";
 
 import "~/styles/globals.scss";
-import MusicBandByIdPage from "./pages/Flats/MusicBandPage/MusicBandPage";
-import MusicBandsListPage from "./pages/Flats/MusicBandsPage/MusicBandsPage";
+import MusicBandByIdPage from "./pages/Flats/FlatPage/FlatPage";
 
 const root = createRoot(document.getElementById("root")!);
 
@@ -18,7 +17,6 @@ root.render(
             <Route path="/" element={<App />} errorElement={<ErrorBoundary />}>
             <Route index element={<HomePage />} />
 
-            <Route path="flats" element={<MusicBandsListPage />} />
             <Route path="flats/:id" element={<MusicBandByIdPage />} />
             </Route>
         </Routes>

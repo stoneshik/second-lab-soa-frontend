@@ -2,7 +2,7 @@ import { api } from "~/lib/axios";
 import { isErrorMessage } from "~/types/ErrorMessage";
 import { serializeFlatRequestCreateToXml, type FlatRequestCreate } from "~/types/flat/FlatRequestCreate";
 
-export const createMusicBand = async (flatRequestCreate: FlatRequestCreate): Promise<void> => {
+export const createFlat = async (flatRequestCreate: FlatRequestCreate): Promise<void> => {
     try {
         const xmlValue: string = serializeFlatRequestCreateToXml(flatRequestCreate);
         await api.post("/flats", xmlValue);

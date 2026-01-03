@@ -53,7 +53,7 @@ export const createFlat = (
     };
 };
 
-export const isValidFlat = (obj: unknown): boolean => {
+export const isValidFlat = (obj: unknown): obj is Flat => {
     if (!obj || typeof obj !== "object") return false;
     const flat = obj as Flat;
     if (

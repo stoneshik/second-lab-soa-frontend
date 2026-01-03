@@ -16,17 +16,14 @@ export default function App(): JSX.Element {
 
 export function ErrorBoundary(): JSX.Element {
     const error = useRouteError();
-
-    let title = "Упс!";
-    let details = "Получена неожиданная ошибка.";
-
+    let title = "Oops!";
+    let details = "Unexpected error.";
     if (isRouteErrorResponse(error)) {
-        title = error.status === 404 ? "404" : "Ошибка";
-        details = error.status === 404 ? "Страница не найдена." : error.statusText || details;
+        title = error.status === 404 ? "404" : "Error";
+        details = error.status === 404 ? "Page not found." : error.statusText || details;
     } else if (import.meta.env.DEV && error instanceof Error) {
         details = error.message;
     }
-
     return (
         <>
         <Header />

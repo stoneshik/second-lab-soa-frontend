@@ -10,7 +10,7 @@ export interface ParamsForUpdateFlat {
 export const updateFlat = async (params: ParamsForUpdateFlat): Promise<void> => {
     try {
         const xmlValue: string = serializeFlatRequestUpdateToXml(params.flatRequestUpdate);
-        await api.put(`/music-bands/${params.id}`, xmlValue);
+        await api.put(`/flats/${params.id}`, xmlValue);
     } catch (error) {
         if (error && typeof error === "object" && "response" in error) {
             // @ts-ignore

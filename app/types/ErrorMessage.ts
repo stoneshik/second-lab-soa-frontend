@@ -8,7 +8,19 @@ export interface ErrorMessage {
     time: string;
 }
 
-export const isErrorMessage = (obj: any): boolean => {
+export const createErrorMessage = (
+    message: string,
+    violations: string[],
+    time: string
+): ErrorMessage => {
+    return {
+        message,
+        violations: { violation: violations },
+        time: time
+    };
+};
+
+export const isErrorMessage = (obj: any): obj is ErrorMessage => {
     return (
         obj &&
         typeof obj.timestamp === "string" &&
@@ -72,15 +84,3 @@ export const serializeErrorMessage = (error: ErrorMessage): string => {
     };
     return builder.build(xmlData);
 }
-
-export const createErrorMessage = (
-    message: string,
-    violations: string[],
-    time: string
-): ErrorMessage => {
-    return {
-        message,
-        violations: { violation: violations },
-        time: time
-    };
-};
