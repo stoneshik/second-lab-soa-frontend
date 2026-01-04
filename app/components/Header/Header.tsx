@@ -16,7 +16,7 @@ export function Header() {
             <div className="header__inner container">
                 <div className="header__brand">
                     <NavLink to="/" className="header__logo" onClick={closeMenu} end>
-                        Сервис ориентированная архитектура
+                        Service oriented architecture
                     </NavLink>
                     <div className="header__subtitle">Стрельбицкий Илья P3413</div>
                 </div>
@@ -33,10 +33,10 @@ export function Header() {
 
                 <nav className={`header__nav ${open ? "header__nav--open" : ""}`}>
                     <NavLink to="/" className={linkClass} onClick={closeMenu} end>
-                        Главная
+                        Main
                     </NavLink>
                     <NavLink to="/flats" className={linkClass} onClick={closeMenu}>
-                        Квартиры
+                        Flats
                     </NavLink>
                 </nav>
             </div>

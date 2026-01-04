@@ -23,7 +23,7 @@ export const createErrorMessage = (
 export const isErrorMessage = (obj: any): obj is ErrorMessage => {
     return (
         obj &&
-        typeof obj.timestamp === "string" &&
+        typeof obj.time === "string" &&
         typeof obj.message === "string" &&
         obj.violations &&
         typeof obj.violations === "object"
@@ -32,10 +32,7 @@ export const isErrorMessage = (obj: any): obj is ErrorMessage => {
 
 export const createMessageStringFromErrorMessage = (errorMessage: ErrorMessage): string => {
     const violations = errorMessage.violations;
-    const stringWithFields = Object.entries(violations)
-            .map(([nameField, description]) => `${nameField} - ${description}`)
-            .join(", ");
-    const message = `${stringWithFields}`;
+    const message = violations.violation.join(", ");
     return message;
 };
 

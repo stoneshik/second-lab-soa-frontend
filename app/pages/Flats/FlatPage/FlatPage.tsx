@@ -8,6 +8,7 @@ import { FlatTable } from "~/components/Tables/Flat/FlatTable/FlatTable";
 import { Button } from "~/components/UI/Button/Button";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
 import styles from "./FlatPage.module.scss";
+import { FlatEditForm } from "~/components/Forms/Flat/FlatEditForm/FlatEditForm";
 
 export default function FlatPage(): JSX.Element {
     const { id } = useParams<{ id: string }>();
@@ -75,6 +76,7 @@ export default function FlatPage(): JSX.Element {
             <div className={styles.error}>{errorMessage}</div>
             {!flat && <div className={styles.error}>Flat not found</div>}
             {flat && <FlatTable flats={[flat]} />}
+            {flat && <FlatEditForm flat={flat} />}
             {flat &&
                 <Button className={styles.delete} onClick={handlingDelete} textButton={"❌ Delete flat"} /> }
             {successMessage && <div className="success">{successMessage}</div>}
