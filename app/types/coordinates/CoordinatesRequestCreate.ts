@@ -16,7 +16,9 @@ export const prepareCoordinatesRequestCreateForXml = (
     coordinatesRequestCreate: CoordinatesRequestCreate
 ): any => {
     return {
-        x: coordinatesRequestCreate.x,
-        y: coordinatesRequestCreate.y,
+        coordinates: {
+            x: coordinatesRequestCreate.x,
+            y: coordinatesRequestCreate.y,
+        }
     };
 };

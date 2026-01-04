@@ -22,8 +22,10 @@ export const prepareHouseRequestUpdateForXml = (
     houseRequestUpdate: HouseRequestUpdate
 ): any => {
     return {
-        name: houseRequestUpdate.name,
-        year: houseRequestUpdate.year,
-        numberOfFlatsOnFloor: houseRequestUpdate.numberOfFlatsOnFloor,
+        house: {
+            name: houseRequestUpdate.name,
+            year: houseRequestUpdate.year,
+            numberOfFlatsOnFloor: houseRequestUpdate.numberOfFlatsOnFloor,
+        }
     };
 };

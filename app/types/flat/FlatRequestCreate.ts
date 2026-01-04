@@ -1,6 +1,6 @@
 import { XMLBuilder } from "fast-xml-parser";
-import { prepareCoordinatesRequestCreateForXml, type CoordinatesRequestCreate } from "../coordinates/CoordinatesRequestCreate";
-import { prepareHouseRequestCreateForXml, type HouseRequestCreate } from "../house/HouseRequestCreate";
+import { type CoordinatesRequestCreate } from "../coordinates/CoordinatesRequestCreate";
+import { type HouseRequestCreate } from "../house/HouseRequestCreate";
 import type { Transport } from "../Transport";
 import type { View } from "../View";
 
@@ -43,13 +43,13 @@ export const prepareFlatRequestCreateForXml = (flatRequestCreate: FlatRequestCre
     const result: any = {
         flat: {
             name: flatRequestCreate.name,
-            coordinates: prepareCoordinatesRequestCreateForXml(flatRequestCreate.coordinates),
+            coordinates: flatRequestCreate.coordinates,
             area: flatRequestCreate.area,
             numberOfRooms: flatRequestCreate.numberOfRooms,
             height: flatRequestCreate.height,
             view: flatRequestCreate.view,
             transport: flatRequestCreate.transport,
-            house: prepareHouseRequestCreateForXml(flatRequestCreate.house)
+            house: flatRequestCreate.house
         },
     };
     return result;
