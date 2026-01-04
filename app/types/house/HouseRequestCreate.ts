@@ -22,10 +22,8 @@ export const prepareHouseRequestCreateForXml = (
     houseRequestCreate: HouseRequestCreate
 ): any => {
     return {
-        house: {
-            name: houseRequestCreate.name,
-            year: houseRequestCreate.year,
-            numberOfFlatsOnFloor: houseRequestCreate.numberOfFlatsOnFloor,
-        }
+        name: houseRequestCreate.name,
+        year: houseRequestCreate.year,
+        numberOfFlatsOnFloor: houseRequestCreate.numberOfFlatsOnFloor,
     };
 };

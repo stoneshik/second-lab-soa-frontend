@@ -16,9 +16,7 @@ export const prepareCoordinatesRequestUpdateForXml = (
     coordinatesRequestUpdate: CoordinatesRequestUpdate
 ): any => {
     return {
-        coordinates: {
-            x: coordinatesRequestUpdate.x,
-            y: coordinatesRequestUpdate.y,
-        }
+        x: coordinatesRequestUpdate.x,
+        y: coordinatesRequestUpdate.y,
     };
 };
