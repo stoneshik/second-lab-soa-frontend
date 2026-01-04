@@ -1,8 +1,8 @@
-import { api } from "~/lib/axios";
+import { api } from "~/utils/lib/axios";
 import { parseErrorMessage } from "~/types/ErrorMessage";
 import { serializeFlatRequestCreateToXml, type FlatRequestCreate } from "~/types/flat/FlatRequestCreate";
 
-export const createFlat = async (flatRequestCreate: FlatRequestCreate): Promise<void> => {
+export const requestCreateFlat = async (flatRequestCreate: FlatRequestCreate): Promise<void> => {
     try {
         const xmlValue: string = serializeFlatRequestCreateToXml(flatRequestCreate);
         await api.post("/flats", xmlValue);

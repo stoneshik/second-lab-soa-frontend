@@ -1,19 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
-import { updateFlat, type ParamsForUpdateFlat } from "~/api/Flat/UpdateFlat";
+import { useCallback, useState } from "react";
+import { requestCreateFlat } from "~/api/Flat/RequestCreateFlat";
 import { Button } from "~/components/UI/Button/Button";
-import { createCoordinatesRequestUpdate } from "~/types/coordinates/CoordinatesRequestUpdate";
+import { createCoordinatesRequestCreate } from "~/types/coordinates/CoordinatesRequestCreate";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
-import type { Flat } from "~/types/flat/Flat";
-import { createFlatRequestUpdate } from "~/types/flat/FlatRequestUpdate";
-import { createHouseRequestUpdate } from "~/types/house/HouseRequestUpdate";
+import { createFlatRequestCreate } from "~/types/flat/FlatRequestCreate";
+import { createHouseRequestCreate } from "~/types/house/HouseRequestCreate";
 import { Transport, TransportDictionary } from "~/types/Transport";
 import { View, ViewDictionary } from "~/types/View";
 import { validateFlatForm } from "~/utils/validateFlatForm";
-import styles from "./FlatEditForm.module.scss";
+import styles from "./FlatCreateForm.module.scss";
 
-type Props = { flat: Flat; };
-
-export function FlatEditForm({ flat }: Readonly<Props>) {
+export function FlatCreateForm() {
     const [name, setName] = useState<string>("");
 
     const [coordinatesX, setCoordinatesX] = useState<number>(0);
@@ -33,27 +30,6 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
 
-    useEffect(() => {
-        if (flat) {
-            setName(flat.name);
-            const coordinates = flat.coordinates;
-            setCoordinatesX(coordinates.x);
-            setCoordinatesY(coordinates.y);
-            setArea(flat.area);
-            setNumberOfRooms(flat.numberOfRooms);
-            setHeight(flat.height);
-            setView(flat.view);
-            setTransport(flat.transport);
-            const house = flat.house;
-            if (house !== null) {
-                setHouseName(house.name);
-                setHouseYear(house.year);
-                setHouseNumberOfFlatsOnFloor(house.numberOfFlatsOnFloor);
-            }
-            setErrorMessage("");
-            setSuccessMessage("");
-        }
-    }, [flat]);
     const validate = useCallback(() => {
         const errorMessage = validateFlatForm(
             name,
@@ -91,16 +67,16 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
             if (!validate()) { return; }
             setLoading(true);
             try {
-                const coordinatesRequestUpdate = createCoordinatesRequestUpdate({
+                const coordinatesRequestUpdate = createCoordinatesRequestCreate({
                     x: coordinatesX,
                     y: coordinatesY,
                 });
-                const house = createHouseRequestUpdate({
+                const house = createHouseRequestCreate({
                     name: houseName,
                     year: houseYear,
                     numberOfFlatsOnFloor: houseNumberOfFlatsOnFloor,
                 });
-                const flatRequestUpdate = createFlatRequestUpdate({
+                const flatRequestCreate = createFlatRequestCreate({
                     name: name,
                     coordinates: coordinatesRequestUpdate,
                     area: area,
@@ -110,14 +86,10 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
                     transport: transport,
                     house: house,
                 });
-                const params: ParamsForUpdateFlat = {
-                    id: flat.id,
-                    flatRequestUpdate: flatRequestUpdate,
-                };
-                await updateFlat(params);
-                setSuccessMessage("Flat successfully updated");
+                await requestCreateFlat(flatRequestCreate);
+                setSuccessMessage("Flat successfully created");
                 setErrorMessage("");
-                setTimeout(() => globalThis.location.reload(), 2000);
+                setTimeout(() => globalThis.location.assign('/'), 2000);
             } catch (error) {
                 if (import.meta.env.DEV) { console.log(error); }
                 if (isErrorMessage(error)) {
@@ -125,7 +97,7 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
                     setErrorMessage(message);
                     return;
                 }
-                setErrorMessage("Error during update");
+                setErrorMessage("Error during creation");
             } finally { setLoading(false); }
         },
         [
@@ -147,7 +119,7 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
     return (
         <div className={styles.formWrapper}>
             <form className={styles.form} onSubmit={(e) => e?.preventDefault()}>
-                <h2 className={styles.title}>Flat update</h2>
+                <h2 className={styles.title}>Flat creation</h2>
                 <div className={styles.field}>
                     <label className={styles.label} htmlFor="flat-name">Name*</label>
                     <input
@@ -295,7 +267,7 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
                     </div>
                 </div>
                 <div className={styles.actions}>
-                    <Button onClick={handleSubmit} textButton={loading ? "Updated..." : "Update"} disabled={loading} />
+                    <Button onClick={handleSubmit} textButton={loading ? "Created..." : "Create"} disabled={loading} />
                 </div>
                 <div className={styles.feedback}>
                     {errorMessage && <div className={styles.error} role="alert">{errorMessage}</div>}

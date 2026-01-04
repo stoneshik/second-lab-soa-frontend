@@ -1,4 +1,4 @@
-import { api } from "~/lib/axios";
+import { api } from "~/utils/lib/axios";
 import { parseErrorMessage } from "~/types/ErrorMessage";
 import { serializeFlatRequestUpdateToXml, type FlatRequestUpdate } from "~/types/flat/FlatRequestUpdate";
 

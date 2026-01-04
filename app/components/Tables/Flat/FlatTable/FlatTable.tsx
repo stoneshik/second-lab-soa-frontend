@@ -21,14 +21,14 @@ export const FlatTable = ({ flats } : FlatTableProps): JSX.Element => {
                     <th>coordinates.y</th>
                     <th>creation date</th>
                     <th>area</th>
-                    <th>number of rooms</th>
+                    <th>number_of_rooms</th>
                     <th>height</th>
                     <th>view</th>
                     <th>transport</th>
                     <th>house.id</th>
                     <th>house.name</th>
                     <th>house.year</th>
-                    <th>house.number of flats on floor</th>
+                    <th>house.number_of_flats_on_floor</th>
                 </tr>
             </thead>
             <tbody>

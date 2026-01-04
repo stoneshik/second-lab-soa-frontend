@@ -1,4 +1,4 @@
-import { api } from "~/lib/axios";
+import { api } from "~/utils/lib/axios";
 import { parseErrorMessage } from "~/types/ErrorMessage";
 import { parseGroupsWrapperXml, type GroupsWrapper } from "~/types/flat/GroupsWrapper";
 

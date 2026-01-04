@@ -1,4 +1,4 @@
-import { api } from "~/lib/axios";
+import { api } from "~/utils/lib/axios";
 import { parseErrorMessage } from "~/types/ErrorMessage";
 import { parseWrapperListFlatsXml, type WrapperListFlats } from "~/types/flat/WrapperListFlats";
 import { createSortValueString, type SortValue } from "~/types/SortValue";
