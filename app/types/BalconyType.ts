@@ -4,8 +4,8 @@ export enum BalconyType {
 }
 
 export const BalconyTypeDictionary: Record<string, string> = {
-    WITH_BALCONY: "with balcony",
-    WITHOUT_BALCONY: "without balcony",
+    [BalconyType.WITH_BALCONY]: "with balcony",
+    [BalconyType.WITHOUT_BALCONY]: "without balcony",
 };
 
 export const parseBalconyType = (value: unknown): BalconyType | null => {

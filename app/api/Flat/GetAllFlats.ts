@@ -1,13 +1,13 @@
 import { api } from "~/utils/lib/axios";
 import { parseErrorMessage } from "~/types/ErrorMessage";
 import { parseWrapperListFlatsXml, type WrapperListFlats } from "~/types/flat/WrapperListFlats";
-import { createSortValueString, type SortValue } from "~/types/SortValue";
+import { createSortBlockString, type SortBlock } from "~/types/SortValue";
 
 export interface ParamsForGetWrapperListFlats {
     filter: string[] | null;
     page: number;
     size: number;
-    sort: SortValue[] | null;
+    sort: SortBlock[] | null;
 }
 
 export const getWrapperListFlats = async (
@@ -24,7 +24,7 @@ export const getWrapperListFlats = async (
         }
         if (params.sort) {
             for (const sortItem of params.sort) {
-                const sortValueString = createSortValueString(sortItem);
+                const sortValueString = createSortBlockString(sortItem);
                 if (sortValueString != null) {
                     queryParams.append('sort', sortValueString);
                 }

@@ -7,11 +7,11 @@ export enum Transport {
 }
 
 export const TransportDictionary: Record<string, string> = {
-    FEW: "few",
-    NONE: "none",
-    LITTLE: "little",
-    NORMAL: "normal",
-    ENOUGH: "enough",
+    [Transport.FEW]: "few",
+    [Transport.NONE]: "none",
+    [Transport.LITTLE]: "little",
+    [Transport.NORMAL]: "normal",
+    [Transport.ENOUGH]: "enough",
 };
 
 export const parseTransport = (value: unknown): Transport | null => {

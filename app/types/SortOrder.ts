@@ -3,11 +3,7 @@ export enum SortOrder {
     DESC = "desc",
 }
 
-export interface SortOrderDictionary {
-    [key: string]: string;
-}
-
-export const SortOrderDictionary: SortOrderDictionary = {
-    asc: "Ascending order",
-    desc: "Descending order",
+export const SortOrderDictionary: Record<string, string> = {
+    [SortOrder.ASC]: "Ascending order",
+    [SortOrder.DESC]: "Descending order",
 };

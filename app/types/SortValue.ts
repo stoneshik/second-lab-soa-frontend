@@ -1,14 +1,14 @@
 import type { SortNameField } from "./SortNameField";
 import type { SortOrder } from "./SortOrder";
 
-export interface SortValue {
+export interface SortBlock {
     sortNameField: SortNameField | null,
     sortOrder: SortOrder | null
 }
 
-export const createSortValueString = (sortValue: SortValue): string | null => {
-    const sortNameField = sortValue.sortNameField;
-    const sortOrder = sortValue.sortOrder;
+export const createSortBlockString = (sortBlock: SortBlock): string | null => {
+    const sortNameField = sortBlock.sortNameField;
+    const sortOrder = sortBlock.sortOrder;
     if (sortNameField == null || sortOrder == null) {
         return null;
     }
