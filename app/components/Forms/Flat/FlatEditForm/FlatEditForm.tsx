@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { updateFlat, type ParamsForUpdateFlat } from "~/api/Flat/UpdateFlat";
 import { Button } from "~/components/UI/Button/Button";
+import { BalconyType, BalconyTypeDictionary } from "~/types/BalconyType";
 import { createCoordinatesRequestUpdate } from "~/types/coordinates/CoordinatesRequestUpdate";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
 import type { Flat } from "~/types/flat/Flat";
@@ -8,6 +9,7 @@ import { createFlatRequestUpdate } from "~/types/flat/FlatRequestUpdate";
 import { createHouseRequestUpdate } from "~/types/house/HouseRequestUpdate";
 import { Transport, TransportDictionary } from "~/types/Transport";
 import { View, ViewDictionary } from "~/types/View";
+import { convertPriceNumberToString, convertPriceStringToNumber } from "~/utils/priceConvert";
 import { validateFlatForm } from "~/utils/validateFlatForm";
 import styles from "./FlatEditForm.module.scss";
 
@@ -28,6 +30,11 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
     const [houseName, setHouseName] = useState<string>("");
     const [houseYear, setHouseYear] = useState<number | null>(null);
     const [houseNumberOfFlatsOnFloor, setHouseNumberOfFlatsOnFloor] = useState<number | null>(null);
+
+    const [price, setPrice] = useState<number>(1);
+    const [balconyType, setBalconyType] = useState<BalconyType>(BalconyType.WITHOUT_BALCONY);
+    const [walkingMinutesToMetro, setWalkingMinutesToMetro] = useState<number>(1);
+    const [transportMinutesToMetro, setTransportMinutesToMetro] = useState<number>(1);
 
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -50,6 +57,10 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
                 setHouseYear(house.year);
                 setHouseNumberOfFlatsOnFloor(house.numberOfFlatsOnFloor);
             }
+            setPrice(convertPriceStringToNumber(flat.price) ?? 0.01);
+            setBalconyType(flat.balconyType);
+            setWalkingMinutesToMetro(flat.walkingMinutesToMetro);
+            setTransportMinutesToMetro(flat.transportMinutesToMetro);
             setErrorMessage("");
             setSuccessMessage("");
         }
@@ -64,7 +75,11 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
             height,
             houseName,
             houseYear,
-            houseNumberOfFlatsOnFloor
+            houseNumberOfFlatsOnFloor,
+            convertPriceNumberToString(price),
+            balconyType,
+            walkingMinutesToMetro,
+            transportMinutesToMetro
         );
         if (errorMessage !== null) {
             setErrorMessage(errorMessage);
@@ -83,6 +98,10 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
         houseName,
         houseYear,
         houseNumberOfFlatsOnFloor,
+        price,
+        balconyType,
+        walkingMinutesToMetro,
+        transportMinutesToMetro
     ]);
     const handleSubmit = useCallback(
         async () => {
@@ -109,6 +128,10 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
                     view: view,
                     transport: transport,
                     house: house,
+                    price: convertPriceNumberToString(price),
+                    balconyType: balconyType,
+                    walkingMinutesToMetro: walkingMinutesToMetro,
+                    transportMinutesToMetro: transportMinutesToMetro
                 });
                 const params: ParamsForUpdateFlat = {
                     id: flat.id,
@@ -140,6 +163,10 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
             houseName,
             houseYear,
             houseNumberOfFlatsOnFloor,
+            price,
+            balconyType,
+            walkingMinutesToMetro,
+            transportMinutesToMetro,
             validate,
         ]
     );
@@ -206,7 +233,7 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
                         id="flat-number-of-rooms"
                         className={styles.input}
                         type="number"
-                        value={(numberOfRooms !== null && Number.isFinite(numberOfRooms)) ? numberOfRooms : ""}
+                        value={(numberOfRooms !== null && Number.isFinite(numberOfRooms)) ? numberOfRooms : 1}
                         onChange={(e) => setNumberOfRooms(Number(e.target.value))}
                         disabled={loading}
                         min={1}
@@ -292,6 +319,60 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
                             min={1}
                             step={1} />
                         <button type="button" onClick={() => setHouseNumberOfFlatsOnFloor(null)}>×</button>
+                    </div>
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor="flat-price">Price*</label>
+                    <input
+                        id="flat-price"
+                        className={styles.input}
+                        type="number"
+                        value={(price !== null && (Number.isFinite(price)) ? price : 0.01)}
+                        onChange={(e) => setPrice(Number(e.target.value))}
+                        disabled={loading}
+                        min={0.01}
+                        step={0.01}
+                        required />
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor="flat-balcony-type">Flat balcony type*</label>
+                    <select
+                        id="flat-balcony-type"
+                        value={balconyType as string ?? ""}
+                        onChange={(e) => setBalconyType(e.target.value as BalconyType)}>
+                        {Object.values(BalconyType).map((s) => (
+                            <option key={s} value={s}>
+                                { BalconyTypeDictionary[s] }
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor="flat-walking-minutes-to-metro">Walking minutes to metro*</label>
+                    <div>
+                        <input
+                            id="flat-walking-minutes-to-metro"
+                            className={styles.input}
+                            type="number"
+                            value={(walkingMinutesToMetro !== null && Number.isFinite(walkingMinutesToMetro)) ? walkingMinutesToMetro : 1}
+                            onChange={(e) => setWalkingMinutesToMetro(Number(e.target.value))}
+                            disabled={loading}
+                            min={1}
+                            step={1} />
+                    </div>
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor="flat-transport-minutes-to-metro">Transport minutes to metro*</label>
+                    <div>
+                        <input
+                            id="flat-transport-minutes-to-metro"
+                            className={styles.input}
+                            type="number"
+                            value={(transportMinutesToMetro !== null && Number.isFinite(transportMinutesToMetro)) ? transportMinutesToMetro : 1}
+                            onChange={(e) => setTransportMinutesToMetro(Number(e.target.value))}
+                            disabled={loading}
+                            min={1}
+                            step={1} />
                     </div>
                 </div>
                 <div className={styles.actions}>
