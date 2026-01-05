@@ -1,7 +1,7 @@
-import { api } from "~/utils/lib/axios";
 import { parseErrorMessage } from "~/types/ErrorMessage";
 import { parseWrapperListFlatsXml, type WrapperListFlats } from "~/types/flat/WrapperListFlats";
-import { createSortBlockString, type SortBlock } from "~/types/SortValue";
+import { createSortBlockString, type SortBlock } from "~/types/sort/SortValue";
+import { api } from "~/utils/lib/axios";
 
 export interface ParamsForGetWrapperListFlats {
     filter: string[] | null;

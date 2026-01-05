@@ -5,16 +5,25 @@ import { FlatTable } from "~/components/Tables/Flat/FlatTable/FlatTable";
 import { Button } from "~/components/UI/Button/Button";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
 import type { WrapperListFlats } from "~/types/flat/WrapperListFlats";
-import { SortNameField, SortNameFieldDictionary } from "~/types/SortNameField";
-import { SortOrder, SortOrderDictionary } from "~/types/SortOrder";
-import type { SortBlock } from "~/types/SortValue";
+import { SortNameField, SortNameFieldDictionary } from "~/types/sort/SortNameField";
+import { SortOrder, SortOrderDictionary } from "~/types/sort/SortOrder";
+import type { SortBlock } from "~/types/sort/SortValue";
 import styles from "./HomePage.module.scss";
+import type { FlatFilterParam } from "~/types/filter/FlatFilterParam";
+import { FlatFilterField, FlatFilterFieldDictionary } from "~/types/filter/FlatFilterField";
+import { FlatFilterOperation, FlatFilterOperationDictionary } from "~/types/filter/FlatFilterOperation";
 
 export default function HomePage(): JSX.Element {
     const [wrapperListFlats, setWrapperListFlats] = useState<WrapperListFlats | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [page, setPage] = useState<number>(0);
     const [size, setSize] = useState<number>(10);
+    const [filterBlocks, setFilterBlocks] = useState<FlatFilterParam[]>([{
+        flatFilterField: null,
+        flatFilterOperation: null,
+        firstArgument: null,
+        secondArgument: null
+    }]);
     const [sortBlocks, setSortBlocks] = useState<SortBlock[]>([
         { sortNameField: null, sortOrder: SortOrder.ASC }
     ]);
@@ -79,24 +88,60 @@ export default function HomePage(): JSX.Element {
             }
         }
     };
-    const addBlock = () => {
+
+    const addFilterBlock = () => {
+        setFilterBlocks([...filterBlocks, {
+            flatFilterField: null,
+            flatFilterOperation: null,
+            firstArgument: null,
+            secondArgument: null
+        }]);
+    };
+    const removeFilterBlock = (index: number) => {
+        if (filterBlocks.length <= 1) return;
+        const newBlocks = [...filterBlocks];
+        newBlocks.splice(index, 1);
+        setFilterBlocks(newBlocks);
+    };
+    const updateFlatFilterField = (index: number, flatFilterField: FlatFilterField | null) => {
+        const newBlocks = [...filterBlocks];
+        newBlocks[index] = { ...newBlocks[index], flatFilterField };
+        setFilterBlocks(newBlocks);
+    };
+    const updateFlatFilterOperation = (index: number, flatFilterOperation: FlatFilterOperation | null) => {
+        const newBlocks = [...filterBlocks];
+        newBlocks[index] = { ...newBlocks[index], flatFilterOperation };
+        setFilterBlocks(newBlocks);
+    };
+    const updateFirstArgument = (index: number, firstArgument: string | null) => {
+        const newBlocks = [...filterBlocks];
+        newBlocks[index] = { ...newBlocks[index], firstArgument };
+        setFilterBlocks(newBlocks);
+    };
+    const updateSecondArgument = (index: number, secondArgument: string | null) => {
+        const newBlocks = [...filterBlocks];
+        newBlocks[index] = { ...newBlocks[index], secondArgument };
+        setFilterBlocks(newBlocks);
+    };
+
+    const addSortBlock = () => {
         setSortBlocks([
         ...sortBlocks,
         { sortNameField: null, sortOrder: SortOrder.ASC }
         ]);
     };
-    const removeBlock = (index: number) => {
+    const removeSortBlock = (index: number) => {
         if (sortBlocks.length <= 1) return;
         const newBlocks = [...sortBlocks];
         newBlocks.splice(index, 1);
         setSortBlocks(newBlocks);
     };
-    const updateField = (index: number, sortNameField: SortNameField | null) => {
+    const updateSortNameField = (index: number, sortNameField: SortNameField | null) => {
         const newBlocks = [...sortBlocks];
         newBlocks[index] = { ...newBlocks[index], sortNameField };
         setSortBlocks(newBlocks);
     };
-    const updateOrder = (index: number, sortOrder: SortOrder) => {
+    const updateSortOrder = (index: number, sortOrder: SortOrder) => {
         const newBlocks = [...sortBlocks];
         newBlocks[index] = { ...newBlocks[index], sortOrder };
         setSortBlocks(newBlocks);
@@ -116,6 +161,59 @@ export default function HomePage(): JSX.Element {
             <div className={styles.error}>{errorMessage}</div>
             <div className={styles.controls}>
                 <div>
+                    {filterBlocks.map((block, index) => (
+                        <div key={index} className={styles.sortBlock}>
+                        <div className={styles.sortBlockContent}>
+                            <select
+                                name={`filter-name-field-${index}`}
+                                value={block.flatFilterField ?? '-'}
+                                onChange={(e) => {
+                                    updateFlatFilterField(
+                                        index,
+                                        e.target.value === '-' ? null : (e.target.value as FlatFilterField)
+                                    );
+                                }}
+                                className={styles.select}>
+                                <option value="-">-</option>
+                                {Object.values(FlatFilterField).map((field) => (
+                                    <option key={field} value={field}>
+                                    {FlatFilterFieldDictionary[field]}
+                                    </option>
+                                ))}
+                            </select>
+                            <select name={`filter-operation-${index}`}
+                                value={block.flatFilterOperation ?? "-"}
+                                onChange={(e) => {
+                                    updateFlatFilterOperation(
+                                        index,
+                                        e.target.value === '-' ? null : (e.target.value as FlatFilterOperation)
+                                    );
+                                }}
+                                className={styles.select}>
+                                <option value="-">-</option>
+                                {Object.values(FlatFilterOperation).map((operation) => (
+                                    <option key={operation} value={operation}>
+                                    {FlatFilterOperationDictionary[operation]}
+                                    </option>
+                                ))}
+                            </select>
+                            {filterBlocks.length > 1 && (
+                                <button
+                                    type="button"
+                                    onClick={() => removeFilterBlock(index)}
+                                    className={styles.removeButton}
+                                    aria-label="Remove block">X</button>
+                            )}
+                        </div>
+                        </div>
+                    ))}
+                    <div className={styles.buttonContainer}>
+                        <button type="button"
+                            onClick={addFilterBlock}
+                            className={styles.addButton}>+ Add filter block</button>
+                    </div>
+                </div>
+                <div>
                     {sortBlocks.map((block, index) => (
                         <div key={index} className={styles.sortBlock}>
                         <div className={styles.sortBlockContent}>
@@ -123,7 +221,7 @@ export default function HomePage(): JSX.Element {
                                 name={`sort-name-field-${index}`}
                                 value={block.sortNameField ?? '-'}
                                 onChange={(e) => {
-                                    updateField(
+                                    updateSortNameField(
                                     index,
                                     e.target.value === '-' ? null : (e.target.value as SortNameField)
                                     );
@@ -139,7 +237,7 @@ export default function HomePage(): JSX.Element {
                             <select name={`sort-order-${index}`}
                                 value={block.sortOrder ?? "-"}
                                 onChange={(e) => {
-                                    updateOrder(index, e.target.value as SortOrder);
+                                    updateSortOrder(index, e.target.value as SortOrder);
                                 }}
                                 className={styles.select}>
                                 {Object.values(SortOrder).map((order) => (
@@ -151,7 +249,7 @@ export default function HomePage(): JSX.Element {
                             {sortBlocks.length > 1 && (
                                 <button
                                     type="button"
-                                    onClick={() => removeBlock(index)}
+                                    onClick={() => removeSortBlock(index)}
                                     className={styles.removeButton}
                                     aria-label="Remove block">X</button>
                             )}
@@ -160,7 +258,7 @@ export default function HomePage(): JSX.Element {
                     ))}
                     <div className={styles.buttonContainer}>
                         <button type="button"
-                            onClick={addBlock}
+                            onClick={addSortBlock}
                             className={styles.addButton}>+ Add sorting block</button>
                     </div>
                 </div>
