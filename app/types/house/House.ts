@@ -42,8 +42,8 @@ export const extractHouseFromXml = (xmlObject: any): House | null => {
         const house = createHouse({
             id: Number(houseData.id),
             name: String(houseData.name),
-            year: houseData.year == null ? null : Number(houseData.year),
-            numberOfFlatsOnFloor: houseData.numberOfFlatsOnFloor == null ?
+            year: !houseData.year ? null : Number(houseData.year),
+            numberOfFlatsOnFloor: !houseData.numberOfFlatsOnFloor ?
                 null : Number(houseData.numberOfFlatsOnFloor),
         });
         return isValidHouse(house) ? house : null;

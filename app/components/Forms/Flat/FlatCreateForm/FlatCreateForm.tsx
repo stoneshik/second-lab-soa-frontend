@@ -1,12 +1,14 @@
 import { useCallback, useState } from "react";
 import { requestCreateFlat } from "~/api/Flat/RequestCreateFlat";
 import { Button } from "~/components/UI/Button/Button";
-import { createCoordinatesRequestCreate } from "~/types/coordinates/CoordinatesRequestCreate";
+import { BalconyType, BalconyTypeDictionary } from "~/types/BalconyType";
+import { createCoordinatesRequestUpdate } from "~/types/coordinates/CoordinatesRequestUpdate";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
 import { createFlatRequestCreate } from "~/types/flat/FlatRequestCreate";
-import { createHouseRequestCreate } from "~/types/house/HouseRequestCreate";
+import { createHouseRequestUpdate } from "~/types/house/HouseRequestUpdate";
 import { Transport, TransportDictionary } from "~/types/Transport";
 import { View, ViewDictionary } from "~/types/View";
+import { convertPriceNumberToString } from "~/utils/priceConvert";
 import { validateFlatForm } from "~/utils/validateFlatForm";
 import styles from "./FlatCreateForm.module.scss";
 
@@ -26,6 +28,11 @@ export function FlatCreateForm() {
     const [houseYear, setHouseYear] = useState<number | null>(null);
     const [houseNumberOfFlatsOnFloor, setHouseNumberOfFlatsOnFloor] = useState<number | null>(null);
 
+    const [price, setPrice] = useState<number>(1);
+    const [balconyType, setBalconyType] = useState<BalconyType>(BalconyType.WITHOUT_BALCONY);
+    const [walkingMinutesToMetro, setWalkingMinutesToMetro] = useState<number>(1);
+    const [transportMinutesToMetro, setTransportMinutesToMetro] = useState<number>(1);
+
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
@@ -40,7 +47,11 @@ export function FlatCreateForm() {
             height,
             houseName,
             houseYear,
-            houseNumberOfFlatsOnFloor
+            houseNumberOfFlatsOnFloor,
+            convertPriceNumberToString(price),
+            balconyType,
+            walkingMinutesToMetro,
+            transportMinutesToMetro
         );
         if (errorMessage !== null) {
             setErrorMessage(errorMessage);
@@ -59,6 +70,10 @@ export function FlatCreateForm() {
         houseName,
         houseYear,
         houseNumberOfFlatsOnFloor,
+        price,
+        balconyType,
+        walkingMinutesToMetro,
+        transportMinutesToMetro
     ]);
     const handleSubmit = useCallback(
         async () => {
@@ -67,11 +82,11 @@ export function FlatCreateForm() {
             if (!validate()) { return; }
             setLoading(true);
             try {
-                const coordinatesRequestUpdate = createCoordinatesRequestCreate({
+                const coordinatesRequestUpdate = createCoordinatesRequestUpdate({
                     x: coordinatesX,
                     y: coordinatesY,
                 });
-                const house = createHouseRequestCreate({
+                const house = createHouseRequestUpdate({
                     name: houseName,
                     year: houseYear,
                     numberOfFlatsOnFloor: houseNumberOfFlatsOnFloor,
@@ -85,6 +100,10 @@ export function FlatCreateForm() {
                     view: view,
                     transport: transport,
                     house: house,
+                    price: convertPriceNumberToString(price),
+                    balconyType: balconyType,
+                    walkingMinutesToMetro: walkingMinutesToMetro,
+                    transportMinutesToMetro: transportMinutesToMetro
                 });
                 await requestCreateFlat(flatRequestCreate);
                 setSuccessMessage("Flat successfully created");
@@ -112,6 +131,10 @@ export function FlatCreateForm() {
             houseName,
             houseYear,
             houseNumberOfFlatsOnFloor,
+            price,
+            balconyType,
+            walkingMinutesToMetro,
+            transportMinutesToMetro,
             validate,
         ]
     );
@@ -178,7 +201,7 @@ export function FlatCreateForm() {
                         id="flat-number-of-rooms"
                         className={styles.input}
                         type="number"
-                        value={(numberOfRooms !== null && Number.isFinite(numberOfRooms)) ? numberOfRooms : ""}
+                        value={(numberOfRooms !== null && Number.isFinite(numberOfRooms)) ? numberOfRooms : 1}
                         onChange={(e) => setNumberOfRooms(Number(e.target.value))}
                         disabled={loading}
                         min={1}
@@ -225,12 +248,12 @@ export function FlatCreateForm() {
                     </select>
                 </div>
                 <div className={styles.field}>
-                    <label className={styles.label} htmlFor="house-name">House name*</label>
+                    <label className={styles.label} htmlFor="house-name">House name</label>
                     <input
                         id="house-name"
                         className={styles.input}
                         type="text"
-                        value={name}
+                        value={houseName}
                         onChange={(e) => setHouseName(e.target.value)}
                         disabled={loading}
                         maxLength={50}
@@ -264,6 +287,60 @@ export function FlatCreateForm() {
                             min={1}
                             step={1} />
                         <button type="button" onClick={() => setHouseNumberOfFlatsOnFloor(null)}>×</button>
+                    </div>
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor="flat-price">Price*</label>
+                    <input
+                        id="flat-price"
+                        className={styles.input}
+                        type="number"
+                        value={(price !== null && (Number.isFinite(price)) ? price : 0.01)}
+                        onChange={(e) => setPrice(Number(e.target.value))}
+                        disabled={loading}
+                        min={0.01}
+                        step={0.01}
+                        required />
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor="flat-balcony-type">Flat balcony type*</label>
+                    <select
+                        id="flat-balcony-type"
+                        value={balconyType as string ?? ""}
+                        onChange={(e) => setBalconyType(e.target.value as BalconyType)}>
+                        {Object.values(BalconyType).map((s) => (
+                            <option key={s} value={s}>
+                                { BalconyTypeDictionary[s] }
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor="flat-walking-minutes-to-metro">Walking minutes to metro*</label>
+                    <div>
+                        <input
+                            id="flat-walking-minutes-to-metro"
+                            className={styles.input}
+                            type="number"
+                            value={(walkingMinutesToMetro !== null && Number.isFinite(walkingMinutesToMetro)) ? walkingMinutesToMetro : 1}
+                            onChange={(e) => setWalkingMinutesToMetro(Number(e.target.value))}
+                            disabled={loading}
+                            min={1}
+                            step={1} />
+                    </div>
+                </div>
+                <div className={styles.field}>
+                    <label className={styles.label} htmlFor="flat-transport-minutes-to-metro">Transport minutes to metro*</label>
+                    <div>
+                        <input
+                            id="flat-transport-minutes-to-metro"
+                            className={styles.input}
+                            type="number"
+                            value={(transportMinutesToMetro !== null && Number.isFinite(transportMinutesToMetro)) ? transportMinutesToMetro : 1}
+                            onChange={(e) => setTransportMinutesToMetro(Number(e.target.value))}
+                            disabled={loading}
+                            min={1}
+                            step={1} />
                     </div>
                 </div>
                 <div className={styles.actions}>

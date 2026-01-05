@@ -33,7 +33,7 @@ export function FlatGroupsByHeightGetForm() {
     return (
         <div className={styles.formWrapper}>
             <form className={styles.form} onSubmit={(e) => e?.preventDefault()}>
-                <h2 className={styles.title}>Getting sum heights of flats</h2>
+                <h2 className={styles.title}>Getting groups of flats by height</h2>
                 <div className={styles.actions}>
                     <Button onClick={handleSubmit} textButton={loading ? "Getting..." : "Get"} disabled={loading} />
                 </div>

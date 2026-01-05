@@ -280,12 +280,12 @@ export function FlatEditForm({ flat }: Readonly<Props>) {
                     </select>
                 </div>
                 <div className={styles.field}>
-                    <label className={styles.label} htmlFor="house-name">House name*</label>
+                    <label className={styles.label} htmlFor="house-name">House name</label>
                     <input
                         id="house-name"
                         className={styles.input}
                         type="text"
-                        value={name}
+                        value={houseName}
                         onChange={(e) => setHouseName(e.target.value)}
                         disabled={loading}
                         maxLength={50}
