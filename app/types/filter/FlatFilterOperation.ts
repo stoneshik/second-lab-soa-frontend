@@ -20,7 +20,7 @@ export const FlatFilterOperationDictionary: Record<string, string> = {
     [FlatFilterOperation.RANGE]: "range",
 };
 
-export const FlatRangeAndIntervalDictionary: Record<string, string> = {
-    [FlatFilterOperation.INTERVAL]: "interval",
-    [FlatFilterOperation.RANGE]: "range",
-};
+export const FlatRangeAndIntervalSet = new Set<string>([
+    FlatFilterOperation.INTERVAL,
+    FlatFilterOperation.RANGE,
+]);

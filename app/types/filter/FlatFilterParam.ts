@@ -1,6 +1,6 @@
 import type { FlatFilterField } from "./FlatFilterField";
 import {
-    FlatRangeAndIntervalDictionary as FlatRangeAndIntervalOperationDictionary,
+    FlatRangeAndIntervalSet,
     type FlatFilterOperation
 } from "./FlatFilterOperation";
 
@@ -13,7 +13,7 @@ export interface FlatFilterParam {
 
 export const createFilterParamString = (
     flatFilterParam: FlatFilterParam
-): string => {
+): string | null => {
     const flatFilterField = flatFilterParam.flatFilterField;
     const flatFilterOperation = flatFilterParam.flatFilterOperation;
     const firstArgument = flatFilterParam.firstArgument;
@@ -21,13 +21,13 @@ export const createFilterParamString = (
     if (flatFilterField === null ||
         flatFilterOperation === null ||
         firstArgument === null) {
-        return "";
+        return null;
     }
-    if (!(flatFilterOperation in FlatRangeAndIntervalOperationDictionary)) {
+    if (!FlatRangeAndIntervalSet.has(flatFilterOperation)) {
         return `${flatFilterField}(${flatFilterOperation})${firstArgument}`;
     }
     if (secondArgument === null) {
-        return "";
+        return null;
     }
     return `${flatFilterField}(${flatFilterOperation})${firstArgument}_${secondArgument}`;
 };

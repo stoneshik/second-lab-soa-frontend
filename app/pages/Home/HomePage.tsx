@@ -3,15 +3,18 @@ import { useCallback, useEffect, useState, type JSX } from "react";
 import { getWrapperListFlats, type ParamsForGetWrapperListFlats } from "~/api/Flat/GetAllFlats";
 import { FlatTable } from "~/components/Tables/Flat/FlatTable/FlatTable";
 import { Button } from "~/components/UI/Button/Button";
+import { BalconyType, BalconyTypeDictionary } from "~/types/BalconyType";
 import { createMessageStringFromErrorMessage, isErrorMessage } from "~/types/ErrorMessage";
+import { FlatFilterField, FlatFilterFieldDictionary, FlatFilterFieldFloatSet, FlatFilterFieldIntegerSet, FlatFilterFieldStringSet } from "~/types/filter/FlatFilterField";
+import { FlatFilterOperation, FlatFilterOperationDictionary, FlatRangeAndIntervalSet } from "~/types/filter/FlatFilterOperation";
+import { createFilterParamString, type FlatFilterParam } from "~/types/filter/FlatFilterParam";
 import type { WrapperListFlats } from "~/types/flat/WrapperListFlats";
 import { SortNameField, SortNameFieldDictionary } from "~/types/sort/SortNameField";
 import { SortOrder, SortOrderDictionary } from "~/types/sort/SortOrder";
 import type { SortBlock } from "~/types/sort/SortValue";
+import { Transport, TransportDictionary } from "~/types/Transport";
+import { View, ViewDictionary } from "~/types/View";
 import styles from "./HomePage.module.scss";
-import type { FlatFilterParam } from "~/types/filter/FlatFilterParam";
-import { FlatFilterField, FlatFilterFieldDictionary } from "~/types/filter/FlatFilterField";
-import { FlatFilterOperation, FlatFilterOperationDictionary } from "~/types/filter/FlatFilterOperation";
 
 export default function HomePage(): JSX.Element {
     const [wrapperListFlats, setWrapperListFlats] = useState<WrapperListFlats | null>(null);
@@ -69,11 +72,23 @@ export default function HomePage(): JSX.Element {
         load,
     ]);
 
-    const handlingSearch = async (page: number, size: number, sortBlocks: SortBlock[]) => {
+    const handlingSearch = async (
+        filterParams: FlatFilterParam[],
+        page: number,
+        size: number,
+        sortBlocks: SortBlock[]
+    ) => {
         try {
             const sort = sortBlocks.filter(block => block.sortNameField !== null);
+            const filter: string[] = [];
+            for (const filterParam of filterParams) {
+                const filterParamString = createFilterParamString(filterParam);
+                if (filterParamString !== null) {
+                    filter.push(filterParamString);
+                }
+            }
             const data = await getWrapperListFlats({
-                filter: null,
+                filter: filter,
                 page: page,
                 size: size,
                 sort: sort
@@ -166,11 +181,11 @@ export default function HomePage(): JSX.Element {
                         <div className={styles.sortBlockContent}>
                             <select
                                 name={`filter-name-field-${index}`}
-                                value={block.flatFilterField ?? '-'}
+                                value={block.flatFilterField ?? "-"}
                                 onChange={(e) => {
                                     updateFlatFilterField(
                                         index,
-                                        e.target.value === '-' ? null : (e.target.value as FlatFilterField)
+                                        e.target.value === "-" ? null : (e.target.value as FlatFilterField)
                                     );
                                 }}
                                 className={styles.select}>
@@ -186,7 +201,7 @@ export default function HomePage(): JSX.Element {
                                 onChange={(e) => {
                                     updateFlatFilterOperation(
                                         index,
-                                        e.target.value === '-' ? null : (e.target.value as FlatFilterOperation)
+                                        e.target.value === "-" ? null : (e.target.value as FlatFilterOperation)
                                     );
                                 }}
                                 className={styles.select}>
@@ -197,6 +212,147 @@ export default function HomePage(): JSX.Element {
                                     </option>
                                 ))}
                             </select>
+                            {block.flatFilterField !== null &&
+                                block.flatFilterOperation !== null &&
+                                !FlatRangeAndIntervalSet.has(block.flatFilterOperation) &&
+                                block.flatFilterField === FlatFilterField.VIEW && (
+                                <select name={`filter-first-argument-${index}`}
+                                    value={block.firstArgument ?? "-"}
+                                    onChange={(e) => {
+                                        updateFirstArgument(
+                                            index,
+                                            e.target.value === "-" ? null : (e.target.value as View)
+                                        );
+                                    }}
+                                    className={styles.select}>
+                                    <option value="-">-</option>
+                                    {Object.values(View).map((firstArgument) => (
+                                        <option key={firstArgument} value={firstArgument}>
+                                        {ViewDictionary[firstArgument]}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                            {block.flatFilterField !== null &&
+                                block.flatFilterOperation !== null &&
+                                !FlatRangeAndIntervalSet.has(block.flatFilterOperation) &&
+                                block.flatFilterField === FlatFilterField.TRANSPORT && (
+                                <select name={`filter-first-argument-${index}`}
+                                    value={block.firstArgument ?? "-"}
+                                    onChange={(e) => {
+                                        updateFirstArgument(
+                                            index,
+                                            e.target.value === "-" ? null : (e.target.value as Transport)
+                                        );
+                                    }}
+                                    className={styles.select}>
+                                    <option value="-">-</option>
+                                    {Object.values(Transport).map((firstArgument) => (
+                                        <option key={firstArgument} value={firstArgument}>
+                                        {TransportDictionary[firstArgument]}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                            {block.flatFilterField !== null &&
+                                block.flatFilterOperation !== null &&
+                                !FlatRangeAndIntervalSet.has(block.flatFilterOperation) &&
+                                block.flatFilterField === FlatFilterField.BALCONY_TYPE && (
+                                <select name={`filter-first-argument-${index}`}
+                                    value={block.firstArgument ?? "-"}
+                                    onChange={(e) => {
+                                        updateFirstArgument(
+                                            index,
+                                            e.target.value === "-" ? null : (e.target.value as BalconyType)
+                                        );
+                                    }}
+                                    className={styles.select}>
+                                    <option value="-">-</option>
+                                    {Object.values(BalconyType).map((firstArgument) => (
+                                        <option key={firstArgument} value={firstArgument}>
+                                        {BalconyTypeDictionary[firstArgument]}
+                                        </option>
+                                    ))}
+                                </select>
+                            )}
+                            {block.flatFilterField !== null &&
+                                block.flatFilterOperation !== null &&
+                                !FlatRangeAndIntervalSet.has(block.flatFilterOperation) &&
+                                FlatFilterFieldStringSet.has(block.flatFilterField) && (
+                                <input
+                                    className={styles.input}
+                                    type="text"
+                                    value={block.firstArgument ?? ""}
+                                    onChange={(e) => {
+                                        updateFirstArgument(
+                                            index,
+                                            e.target.value === "" ? null : e.target.value
+                                        );
+                                    }}
+                                    maxLength={50}/>
+                            )}
+                            {block.flatFilterField !== null &&
+                                block.flatFilterOperation !== null &&
+                                FlatFilterFieldIntegerSet.has(block.flatFilterField) && (
+                                <input
+                                    className={styles.input}
+                                    type="number"
+                                    value={block.firstArgument ?? ""}
+                                    onChange={(e) => {
+                                        updateFirstArgument(
+                                            index,
+                                            e.target.value === "" ? null : e.target.value
+                                        );
+                                    }}
+                                    step={1} />
+                            )}
+                            {block.flatFilterField !== null &&
+                                block.flatFilterOperation !== null &&
+                                FlatFilterFieldFloatSet.has(block.flatFilterField) && (
+                                <input
+                                    className={styles.input}
+                                    type="number"
+                                    value={block.firstArgument ?? ""}
+                                    onChange={(e) => {
+                                        updateFirstArgument(
+                                            index,
+                                            e.target.value === "" ? null : e.target.value
+                                        );
+                                    }}
+                                    step={0.1} />
+                            )}
+                            {block.flatFilterField !== null &&
+                                block.flatFilterOperation !== null &&
+                                FlatRangeAndIntervalSet.has(block.flatFilterOperation) &&
+                                FlatFilterFieldIntegerSet.has(block.flatFilterField) && (
+                                <input
+                                    className={styles.input}
+                                    type="number"
+                                    value={block.secondArgument ?? ""}
+                                    onChange={(e) => {
+                                        updateSecondArgument(
+                                            index,
+                                            e.target.value === "" ? null : e.target.value
+                                        );
+                                    }}
+                                    step={1} />
+                            )}
+                            {block.flatFilterField !== null &&
+                                block.flatFilterOperation !== null &&
+                                FlatRangeAndIntervalSet.has(block.flatFilterOperation) &&
+                                FlatFilterFieldFloatSet.has(block.flatFilterField) && (
+                                <input
+                                    className={styles.input}
+                                    type="number"
+                                    value={block.secondArgument ?? ""}
+                                    onChange={(e) => {
+                                        updateSecondArgument(
+                                            index,
+                                            e.target.value === "" ? null : e.target.value
+                                        );
+                                    }}
+                                    step={0.1} />
+                            )}
                             {filterBlocks.length > 1 && (
                                 <button
                                     type="button"
@@ -276,7 +432,7 @@ export default function HomePage(): JSX.Element {
                             </option>
                         ))}
                     </select>
-                    <button type="button" onClick={() => handlingSearch(page, size, sortBlocks)}>Search</button>
+                    <button type="button" onClick={() => handlingSearch(filterBlocks, page, size, sortBlocks)}>Search</button>
                 </div>
             </div>
 

@@ -41,3 +41,28 @@ export const FlatFilterFieldDictionary: Record<string, string> = {
     [FlatFilterField.WALKING_MINUTES_TO_METRO]: "walking minutes to metro",
     [FlatFilterField.TRANSPORT_MINUTES_TO_METRO]: "transport minutes to metro",
 };
+
+export const FlatFilterFieldIntegerSet = new Set<string>([
+    FlatFilterField.ID,
+    FlatFilterField.COORDINATES_ID,
+    FlatFilterField.COORDINATES_Y,
+    FlatFilterField.AREA,
+    FlatFilterField.NUMBER_OF_ROOMS,
+    FlatFilterField.HEIGHT,
+    FlatFilterField.HOUSE_ID,
+    FlatFilterField.HOUSE_YEAR,
+    FlatFilterField.HOUSE_NUMBER_OF_FLATS_ON_FLOOR,
+    FlatFilterField.WALKING_MINUTES_TO_METRO,
+    FlatFilterField.TRANSPORT_MINUTES_TO_METRO,
+]);
+
+export const FlatFilterFieldFloatSet = new Set<string>([
+    FlatFilterField.COORDINATES_X,
+    FlatFilterField.PRICE,
+]);
+
+export const FlatFilterFieldStringSet = new Set<string>([
+    FlatFilterField.NAME,
+    FlatFilterField.CREATION_DATE,
+    FlatFilterField.HOUSE_NAME,
+]);
