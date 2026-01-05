@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { Link } from "react-router-dom";
+import { BalconyTypeDictionary } from "~/types/BalconyType";
 import type { Flat } from "~/types/flat/Flat";
 import { TransportDictionary } from "~/types/Transport";
 import { ViewDictionary } from "~/types/View";
@@ -21,14 +22,18 @@ export const FlatTable = ({ flats } : FlatTableProps): JSX.Element => {
                     <th>coordinates.y</th>
                     <th>creation date</th>
                     <th>area</th>
-                    <th>number_of_rooms</th>
+                    <th>number of rooms</th>
                     <th>height</th>
                     <th>view</th>
                     <th>transport</th>
                     <th>house.id</th>
                     <th>house.name</th>
                     <th>house.year</th>
-                    <th>house.number_of_flats_on_floor</th>
+                    <th>house.number of flats on floor</th>
+                    <th>price</th>
+                    <th>balconyType</th>
+                    <th>walking minutes to metro</th>
+                    <th>transport minutes to metro</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,6 +63,10 @@ export const FlatTable = ({ flats } : FlatTableProps): JSX.Element => {
                         <td>{flat.house.name}</td>
                         <td>{flat.house.year ?? "-"}</td>
                         <td>{flat.house.numberOfFlatsOnFloor ?? "-"}</td>
+                        <td>{flat.price}</td>
+                        <td>{BalconyTypeDictionary[flat.balconyType]}</td>
+                        <td>{flat.walkingMinutesToMetro}</td>
+                        <td>{flat.transportMinutesToMetro}</td>
                     </tr>
                 )
             )}

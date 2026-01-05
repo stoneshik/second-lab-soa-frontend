@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+import { BalconyType } from "../BalconyType";
 import {
     extractCoordinatesFromXml,
     isValidCoordinates,
@@ -11,6 +12,7 @@ import {
 } from "../house/House";
 import { parseTransport, Transport } from "../Transport";
 import { parseView, View } from "../View";
+import { convertPriceNumberToString } from "~/utils/priceConvert";
 
 export interface Flat {
     id: number;
@@ -23,6 +25,10 @@ export interface Flat {
     view: View | null;
     transport: Transport | null;
     house: House;
+    price: string;
+    balconyType: BalconyType;
+    walkingMinutesToMetro: number;
+    transportMinutesToMetro: number;
 }
 
 export const createFlat = (
@@ -36,7 +42,11 @@ export const createFlat = (
         height: number,
         view: View | null,
         transport: Transport | null,
-        house: House
+        house: House,
+        price: string,
+        balconyType: BalconyType,
+        walkingMinutesToMetro: number,
+        transportMinutesToMetro: number,
     }
 ): Flat => {
     return {
@@ -50,6 +60,10 @@ export const createFlat = (
         view: data.view,
         transport: data.transport,
         house: data.house,
+        price: data.price,
+        balconyType: data.balconyType,
+        walkingMinutesToMetro: data.walkingMinutesToMetro,
+        transportMinutesToMetro: data.transportMinutesToMetro,
     };
 };
 
@@ -61,13 +75,17 @@ export const isValidFlat = (obj: unknown): obj is Flat => {
         typeof flat.name !== "string" ||
         typeof flat.creationDate !== "string" ||
         typeof flat.numberOfRooms !== "number" ||
-        typeof flat.height !== "number"
+        typeof flat.height !== "number" ||
+        !Object.values(BalconyType).includes(flat.balconyType) ||
+        typeof flat.walkingMinutesToMetro !== "number" ||
+        typeof flat.transportMinutesToMetro !== "number"
     ) {
         return false;
     }
     if (!isValidCoordinates(flat.coordinates) || !isValidHouse(flat.house)) {
         return false;
     }
+    if (typeof flat.price !== "string" && convertPriceNumberToString(flat.price) === null) return false;
     if (flat.area !== null && typeof flat.area !== "number") return false;
     if (flat.view !== null && !Object.values(View).includes(flat.view)) return false;
     if (flat.transport !== null && !Object.values(Transport).includes(flat.transport)) return false;
@@ -94,6 +112,10 @@ export const extractFlatFromXml = (xmlObject: any): Flat | null => {
             view: flatData.view == null ? null : parseView(flatData.view),
             transport: flatData.transport == null ? null : parseTransport(flatData.transport),
             house: house,
+            price: flatData.price,
+            balconyType: flatData.balconyType,
+            walkingMinutesToMetro: flatData.walkingMinutesToMetro,
+            transportMinutesToMetro: flatData.transportMinutesToMetro,
         });
         return isValidFlat(flat) ? flat : null;
     } catch {

@@ -1,4 +1,5 @@
 import { XMLBuilder } from "fast-xml-parser";
+import type { BalconyType } from "../BalconyType";
 import { type CoordinatesRequestUpdate } from "../coordinates/CoordinatesRequestUpdate";
 import { type HouseRequestUpdate } from "../house/HouseRequestUpdate";
 import type { Transport } from "../Transport";
@@ -13,6 +14,10 @@ export interface FlatRequestUpdate {
     view: View | null;
     transport: Transport | null;
     house: HouseRequestUpdate;
+    price: string;
+    balconyType: BalconyType;
+    walkingMinutesToMetro: number;
+    transportMinutesToMetro: number;
 }
 
 export const createFlatRequestUpdate = (
@@ -24,7 +29,11 @@ export const createFlatRequestUpdate = (
         height: number,
         view: View | null,
         transport: Transport | null,
-        house: HouseRequestUpdate
+        house: HouseRequestUpdate,
+        price: string,
+        balconyType: BalconyType,
+        walkingMinutesToMetro: number,
+        transportMinutesToMetro: number,
     }
 ): FlatRequestUpdate => {
     return {
@@ -36,6 +45,10 @@ export const createFlatRequestUpdate = (
         view: data.view,
         transport: data.transport,
         house: data.house,
+        price: data.price,
+        balconyType: data.balconyType,
+        walkingMinutesToMetro: data.walkingMinutesToMetro,
+        transportMinutesToMetro: data.transportMinutesToMetro,
     };
 };
 
@@ -49,7 +62,11 @@ export const prepareFlatRequestUpdateForXml = (flatRequestUpdate: FlatRequestUpd
             height: flatRequestUpdate.height,
             view: flatRequestUpdate.view,
             transport: flatRequestUpdate.transport,
-            house: flatRequestUpdate.house
+            house: flatRequestUpdate.house,
+            price: flatRequestUpdate.price,
+            balconyType: flatRequestUpdate.balconyType,
+            walkingMinutesToMetro: flatRequestUpdate.walkingMinutesToMetro,
+            transportMinutesToMetro: flatRequestUpdate.transportMinutesToMetro,
         },
     };
     return result;
