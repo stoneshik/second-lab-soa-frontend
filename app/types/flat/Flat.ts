@@ -112,7 +112,7 @@ export const extractFlatFromXml = (xmlObject: any): Flat | null => {
             view: flatData.view === null ? null : parseView(flatData.view),
             transport: flatData.transport === null ? null : parseTransport(flatData.transport),
             house: house,
-            price: flatData.price,
+            price: convertPriceNumberToString(flatData.price),
             balconyType: flatData.balconyType,
             walkingMinutesToMetro: flatData.walkingMinutesToMetro,
             transportMinutesToMetro: flatData.transportMinutesToMetro,
