@@ -120,7 +120,12 @@ export default function HomePage(): JSX.Element {
     };
     const updateFlatFilterField = (index: number, flatFilterField: FlatFilterField | null) => {
         const newBlocks = [...filterBlocks];
-        newBlocks[index] = { ...newBlocks[index], flatFilterField };
+        newBlocks[index] = {
+            ...newBlocks[index],
+            flatFilterField: flatFilterField,
+            firstArgument: null,
+            secondArgument: null
+        };
         setFilterBlocks(newBlocks);
     };
     const updateFlatFilterOperation = (index: number, flatFilterOperation: FlatFilterOperation | null) => {
@@ -286,7 +291,7 @@ export default function HomePage(): JSX.Element {
                                     onChange={(e) => {
                                         updateFirstArgument(
                                             index,
-                                            e.target.value === "" ? null : e.target.value
+                                            e.target.value
                                         );
                                     }}
                                     maxLength={50}/>
