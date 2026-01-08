@@ -32,6 +32,9 @@ export const isErrorMessage = (obj: any): obj is ErrorMessage => {
 
 export const createMessageStringFromErrorMessage = (errorMessage: ErrorMessage): string => {
     const violations = errorMessage.violations;
+    if (violations.violation.length <= 0) {
+        return errorMessage.message;
+    }
     const message = violations.violation.join(", ");
     return message;
 };
