@@ -38,6 +38,9 @@ export function Header() {
                     <NavLink to="/flats" className={linkClass} onClick={closeMenu}>
                         Flats
                     </NavLink>
+                    <NavLink to="/additional-operations" className={linkClass} onClick={closeMenu}>
+                        Additional operations
+                    </NavLink>
                 </nav>
             </div>
         </header>

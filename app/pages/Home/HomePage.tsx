@@ -445,7 +445,7 @@ export default function HomePage(): JSX.Element {
 
             <div className={styles.pagination}>
                 <Button onClick={handlePrevPage} textButton={"Back"} disabled={page <= 0}/>
-                <span>Страница {page + 1} из {totalPages}</span>
+                <span>Page {page + 1} of {totalPages}</span>
                 <Button onClick={handleNextPage} textButton={"Forward"} disabled={page >= totalPages - 1}/>
             </div>
         </div>

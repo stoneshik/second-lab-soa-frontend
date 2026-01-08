@@ -1,0 +1,114 @@
+$border_color: #ccc;
+
+.wrapper {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+        margin-bottom: 1rem;
+    }
+
+    .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+
+        select {
+            margin: 0;
+            margin-right: 0.5rem;
+        }
+    }
+
+    input {
+        padding: 0.5rem;
+        border: 1px solid $border_color;
+        border-radius: 4px;
+    }
+
+    .error {
+        color: $error_color;
+        margin-bottom: 28px;
+    }
+
+    .pagination {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+}
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.form {
+    margin-top: 1rem;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+
+    select {
+        padding: 0.5rem;
+        margin: 0;
+        border-radius: 4px;
+        border: 1px solid $border_color;
+        background-color: $bg-primary-button-active;
+        color: $color-button-text-active;
+        font-weight: 600;
+    }
+}
+
+.title {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.75rem;
+
+    button {
+        margin-left: 0.5rem;
+        width: 40px;
+        height: 40px;
+        background-color: $bg-primary-button-active;
+        color: $color-button-text-active;
+    }
+
+    button:hover {
+        background-color: $bg-primary-button;
+        color: $color-button-text;
+    }
+}
+
+.label {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.feedback {
+    margin-top: 0.75rem;
+}
+
+.error {
+    color: #b91c1c;
+}
+
+.success {
+    color: #065f46;
+}
