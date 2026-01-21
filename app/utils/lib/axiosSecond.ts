@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const api = axios.create({
-    baseURL: "https://localhost:33511/api/v1",
+export const apiForSecond = axios.create({
+    baseURL: "https://localhost:33521/api/v1",
     withCredentials: true,
     headers: {
         'Content-Type': 'application/xml',

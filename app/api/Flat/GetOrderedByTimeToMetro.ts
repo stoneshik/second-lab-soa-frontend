@@ -2,7 +2,7 @@ import { parseErrorMessage } from "~/types/ErrorMessage";
 import { parseWrapperListFlatsXml, type WrapperListFlats } from "~/types/flat/WrapperListFlats";
 import type { SortType } from "~/types/params/SortType";
 import type { TransportType } from "~/types/params/TransportType";
-import { api } from "~/utils/lib/axios";
+import { apiForSecond } from "~/utils/lib/axiosSecond";
 
 export interface ParamsGetOrderedByTimeToMetro {
     transportType: TransportType,
@@ -21,7 +21,7 @@ export const getOrderedByTimeToMetro = async ({
         const queryParams = new URLSearchParams();
         queryParams.append('page', page.toString());
         queryParams.append('size', size.toString());
-        const response = await api.get(
+        const response = await apiForSecond.get(
             `/flats/get-ordered-by-time-to-metro/${transportType}/${sortType}`,
             { params: queryParams }
         );

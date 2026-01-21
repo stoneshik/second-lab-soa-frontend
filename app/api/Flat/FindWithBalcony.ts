@@ -2,7 +2,7 @@ import type { BalconyType } from "~/types/BalconyType";
 import { parseErrorMessage } from "~/types/ErrorMessage";
 import { parseFlatXml, type Flat } from "~/types/flat/Flat";
 import type { PriceType } from "~/types/params/PriceType";
-import { api } from "~/utils/lib/axios";
+import { apiForSecond } from "~/utils/lib/axiosSecond";
 
 export interface ParamsFindWithBalcony {
     priceType: PriceType,
@@ -13,7 +13,7 @@ export const findWithBalcony = async (
     { priceType, balconyType }: ParamsFindWithBalcony
 ): Promise<Flat> => {
     try {
-        const response = await api.get(`/flats/find-with-balcony/${priceType}/${balconyType}`);
+        const response = await apiForSecond.get(`/flats/find-with-balcony/${priceType}/${balconyType}`);
         const responseFlat = parseFlatXml(response.data);
         return responseFlat as Flat;
     } catch (error) {
